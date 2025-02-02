@@ -45,4 +45,9 @@ impl Sudoku {
         }
         is_valid
     }
+
+    pub fn is_value_valid(&self, row: usize, col: usize) -> bool {
+        let (sub_row, sub_col) = (row % 3, col % 3);
+        self.is_row_valid(row) && self.is_column_valid(col) && self.is_subgrid_valid(sub_row, sub_col)
+    }
 }

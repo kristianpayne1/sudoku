@@ -11,7 +11,7 @@ impl Sudoku {
         Self { grid: Grid::new() }
     }
 
-    pub fn set_value(&mut self, value: u8, row: usize, col: usize) -> Result<(), SetValueError> {
+    pub fn set_value(&mut self, row: usize, col: usize, value: u8,) -> Result<(), SetValueError> {
         if value < 1 || value > 9 {
             return Err(SetValueError::InvalidValue);
         }

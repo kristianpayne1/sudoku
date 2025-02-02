@@ -23,4 +23,8 @@ impl SubGrid {
     pub fn get_col(&self, col: usize) -> Vec<&Cell> {
         self.0.iter().map(|row| &row[col]).collect()
     }
+
+    pub fn get_all(&self) -> Vec<&Cell> {
+        self.0.iter().flatten().collect()
+    }
 }

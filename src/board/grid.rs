@@ -35,4 +35,8 @@ impl Grid {
             .flat_map(|sub_row| sub_row[sub_col].get_col(cell_col))
             .collect()
     }
+
+    pub fn get_subgrid(&self, sub_row: usize, sub_col: usize) -> &SubGrid {
+        &self.0[sub_row][sub_col]
+    }
 }

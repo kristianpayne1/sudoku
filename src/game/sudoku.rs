@@ -12,7 +12,7 @@ impl Sudoku {
     }
 
     pub fn set_value(&mut self, value: u8, row: usize, col: usize) -> Result<(), SetValueError> {
-        if (value < 1 || value > 9) {
+        if value < 1 || value > 9 {
             return Err(SetValueError::InvalidValue);
         }
         match self.grid.get(row, col) {

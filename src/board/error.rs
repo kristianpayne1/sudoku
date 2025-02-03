@@ -1,8 +1,11 @@
 use std::fmt;
 
+#[derive(Debug)]
 pub struct AlreadyFilledError;
+#[derive(Debug)]
 pub struct InvalidValueError;
 
+#[derive(Debug)]
 pub enum SetValueError {
     InvalidValue,
     AlreadyFilledError,

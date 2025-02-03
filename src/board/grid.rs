@@ -1,5 +1,5 @@
-use crate::board::subgrid::SubGrid;
 use super::cell::Cell;
+use crate::board::subgrid::SubGrid;
 
 pub struct Grid([[SubGrid; 3]; 3]);
 

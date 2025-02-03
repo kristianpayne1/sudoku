@@ -1,4 +1,4 @@
-use crate::game::{Sudoku};
+use crate::game::Sudoku;
 
 pub const TOP_BORDER: &str = "╔═ ═ ═╤═ ═ ═╤═ ═ ═╦═ ═ ═╤═ ═ ═╤═ ═ ═╦═ ═ ═╤═ ═ ═╤═ ═ ═╗";
 pub const BOTTOM_BORDER: &str = "╚═ ═ ═╧═ ═ ═╧═ ═ ═╩═ ═ ═╧═ ═ ═╧═ ═ ═╩═ ═ ═╧═ ═ ═╧═ ═ ═╝";
@@ -20,7 +20,11 @@ impl Sudoku {
                         row_str.push(match col {
                             c if c % 18 == 0 => '║',
                             c if c % 6 == 0 => '│',
-                            c if c % 3 == 0 => format!("{}", self.grid.get((row - 1) / 2, (col - 1) / 6)).parse().unwrap(),
+                            c if c % 3 == 0 => {
+                                format!("{}", self.grid.get((row - 1) / 2, (col - 1) / 6))
+                                    .parse()
+                                    .unwrap()
+                            }
                             _ => ' ',
                         });
                     }

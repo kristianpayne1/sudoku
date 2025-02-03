@@ -15,5 +15,7 @@ impl fmt::Display for AlreadyFilledError {
 }
 
 impl fmt::Display for InvalidValueError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "Value is invalid") }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Value is invalid")
+    }
 }

@@ -1,5 +1,5 @@
 pub mod board;
-pub mod helpers;
 pub mod game;
+pub mod helpers;
 
 pub use game::Sudoku;

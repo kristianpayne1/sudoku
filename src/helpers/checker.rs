@@ -1,6 +1,6 @@
-use std::collections::HashSet;
 use crate::board::cell::Cell;
 use crate::Sudoku;
+use std::collections::HashSet;
 
 fn is_list_correct(list: Vec<&Cell>) -> bool {
     let mut seen: HashSet<&u8> = HashSet::new();
@@ -41,7 +41,9 @@ impl Sudoku {
         let mut i = 0;
         while is_correct && i < 9 {
             let (sub_row, sub_col) = (i % 3, (i / 9) * 10);
-            is_correct = self.is_row_correct(i) && self.is_column_correct(i) && self.is_subgrid_correct(sub_row, sub_col);
+            is_correct = self.is_row_correct(i)
+                && self.is_column_correct(i)
+                && self.is_subgrid_correct(sub_row, sub_col);
             i += 1;
         }
         is_correct

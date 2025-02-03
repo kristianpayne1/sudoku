@@ -3,23 +3,22 @@ use crate::board::cell::Cell;
 use crate::Sudoku;
 
 fn is_list_valid(list: Vec<&Cell>) -> bool {
-    let seen: HashSet<&u8> = HashSet::new();
-    let mut required_numbers = (1..=9).collect::<HashSet<_>>();
+    let mut seen: HashSet<&u8> = HashSet::new();
     let mut has_duplicates = false;
 
     for &cell in list.iter() {
         match cell {
-            Cell::Empty => return false,
+            Cell::Empty => (), // Do nothing
             Cell::Value(num) => {
-                if !seen.contains(&num) {
+                if seen.contains(&num) {
                     has_duplicates = true;
                 }
-                required_numbers.remove(&num);
+                seen.insert(&num);
             }
         }
     }
 
-    !has_duplicates && required_numbers.is_empty()
+    !has_duplicates
 }
 
 impl Sudoku {
@@ -48,6 +47,6 @@ impl Sudoku {
 
     pub fn is_value_valid(&self, row: usize, col: usize) -> bool {
         let (sub_row, sub_col) = (row % 3, col % 3);
-        self.is_row_valid(row) && self.is_column_valid(col) && self.is_subgrid_valid(sub_row, sub_col)
+        self.is_row_correct(row) && self.is_column_correct(col) && self.is_subgrid_correct(sub_row, sub_col)
     }
 }

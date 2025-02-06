@@ -39,4 +39,8 @@ impl Grid {
     pub fn get_subgrid(&self, sub_row: usize, sub_col: usize) -> &SubGrid {
         &self.0[sub_row][sub_col]
     }
+
+    pub fn size(&self) -> usize {
+        9
+    }
 }

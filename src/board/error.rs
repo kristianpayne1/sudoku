@@ -4,6 +4,7 @@ use std::fmt;
 pub struct AlreadyFilledError;
 #[derive(Debug)]
 pub struct InvalidValueError;
+pub struct NoAvailableValidValuesError;
 
 #[derive(Debug)]
 pub enum SetValueError {
@@ -20,5 +21,11 @@ impl fmt::Display for AlreadyFilledError {
 impl fmt::Display for InvalidValueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Value is invalid")
+    }
+}
+
+impl fmt::Display for NoAvailableValidValuesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "No available values")
     }
 }

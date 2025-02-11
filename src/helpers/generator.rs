@@ -1,33 +1,12 @@
 use rand::Rng;
-use std::collections::HashSet;
 
 use crate::board::cell::Cell;
 use crate::board::error::NoAvailableValidValuesError;
 use crate::board::grid::Grid;
 use crate::Sudoku;
 
-fn get_available_values(grid: &Grid, row: usize, col: usize) -> HashSet<u8> {
-    let subgrid = grid.get_subgrid(row / 3, col / 3);
-    let row_list = grid.get_row(row);
-    let column_list = grid.get_col(col);
-    let all_cells = row_list
-        .into_iter()
-        .chain(column_list)
-        .chain(subgrid.get_all());
-    let mut available_values = (1..=9).collect::<HashSet<_>>();
-    for cell in all_cells {
-        if let Cell::Value(value) = cell {
-            if available_values.contains(value) {
-                available_values.remove(value);
-            }
-        }
-    }
-
-    available_values
-}
-
 impl Sudoku {
-    pub fn fill_grid(
+    pub fn fill_board(
         &self,
         mut grid: &mut Grid,
         index: usize,
@@ -38,7 +17,7 @@ impl Sudoku {
         }
 
         let (row, col) = (index / 9, index % 9);
-        let mut available_values = get_available_values(&grid, row, col);
+        let mut available_values = Sudoku::get_all_available_values(&grid, row, col);
 
         let mut valid_value = false;
         while !valid_value {
@@ -50,7 +29,7 @@ impl Sudoku {
             let random_index = rand::rng().random_range(0..available_values.len());
             let value = available_values_list[random_index];
             grid.set(row, col, Cell::Value(value));
-            match self.fill_grid(&mut grid, index + 1) {
+            match self.fill_board(&mut grid, index + 1) {
                 Ok(_) => valid_value = true,
                 Err(_) => {
                     available_values.remove(&value);
@@ -60,11 +39,9 @@ impl Sudoku {
         Ok(())
     }
 
-    pub fn generate(&mut self) {
+    pub fn generate_puzzle(&mut self) -> Result<Grid, NoAvailableValidValuesError> {
         let mut grid = Grid::new();
-        match self.fill_grid(&mut grid, 0) {
-            Ok(_) => self.grid = grid,
-            Err(_) => panic!("Failed to generate a valid sudoku board"),
-        }
+        self.fill_board(&mut grid, 0)?;
+        Ok(grid)
     }
 }

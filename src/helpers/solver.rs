@@ -77,17 +77,17 @@ impl Sudoku {
 
         // Check for unique intersections
         if sub_grid.get_col(sub_col).len() == 2 {
-            for value in &all_available_values {
-                if let Some(val) = row_neighbors_duplicates.get(&value) {
-                    return Ok(val.clone());
+            for &value in &all_available_values {
+                if row_neighbors_duplicates.contains(&value) {
+                    return Ok(value);
                 }
             }
         }
 
         if sub_grid.get_row(sub_row).len() == 2 {
-            for value in &all_available_values {
-                if let Some(val) = col_neighbors_duplicates.get(value) {
-                    return Ok(val.clone());
+            for &value in &all_available_values {
+                if col_neighbors_duplicates.contains(&value) {
+                    return Ok(value);
                 }
             }
         }

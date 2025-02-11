@@ -6,7 +6,7 @@ fn main() {
         Ok(grid) => sudoku.grid = grid,
         Err(err) => println!("{}", err),
     }
-    println!("Is correct: {}", sudoku.is_correct());
-    println!("Is valid: {}", sudoku.is_valid());
     sudoku.display();
+    println!("Valid {}", sudoku.is_valid());
+    println!("Correct {}", sudoku.is_correct());
 }

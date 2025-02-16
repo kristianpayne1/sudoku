@@ -1,6 +1,7 @@
 use super::cell::Cell;
 use crate::board::subgrid::SubGrid;
 
+#[derive(Clone, Copy, PartialEq)]
 pub struct Grid([[SubGrid; 3]; 3]);
 
 impl Grid {

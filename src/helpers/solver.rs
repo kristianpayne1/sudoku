@@ -40,4 +40,6 @@ impl Sudoku {
 
         get_available_values(&cells)
     }
+
+    // pub fn solve(&self, mut grid: &Grid) -> Result<(), NoAvailableValidValuesError> {}
 }

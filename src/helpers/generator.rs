@@ -18,6 +18,9 @@ impl Sudoku {
         }
 
         let (row, col) = (index / 9, index % 9);
+        if let Cell::Value(_) = grid.get(row, col) {
+            return self.fill_board(grid, index + 1);
+        }
         let mut available_values = Sudoku::get_all_available_values(&grid, row, col);
 
         let mut valid_value = false;
@@ -44,9 +47,10 @@ impl Sudoku {
         &mut self,
         difficulty: Difficulty,
     ) -> Result<Grid, NoAvailableValidValuesError> {
-        let mut grid = Grid::new();
-        self.fill_board(&mut grid, 0)?;
-        grid.display();
+        let mut solution = Grid::new();
+        self.fill_board(&mut solution, 0)?;
+        solution.display();
+        let mut grid = solution.clone();
 
         let mut i = difficulty.value();
         while i > 0 {
@@ -55,9 +59,11 @@ impl Sudoku {
                 rand::rng().random_range(0..grid_size),
                 rand::rng().random_range(0..grid_size),
             );
-            match grid.get(random_row, random_col) {
-                Cell::Empty => continue,
-                Cell::Value(_) => {
+            if let Cell::Value(_) = grid.get(random_row, random_col) {
+                let mut grid_copy = grid.clone();
+                grid_copy.set(random_row, random_col, Cell::Empty);
+                self.fill_board(&mut grid_copy, 0)?;
+                if grid_copy == solution {
                     grid.set(random_row, random_col, Cell::Empty);
                     i -= 1;
                 }

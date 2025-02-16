@@ -4,6 +4,7 @@ use std::fmt;
 pub struct AlreadyFilledError;
 #[derive(Debug)]
 pub struct InvalidValueError;
+#[derive(Debug)]
 pub struct NoAvailableValidValuesError;
 pub struct NoSolutionFoundError;
 

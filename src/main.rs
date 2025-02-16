@@ -3,11 +3,7 @@ use sudoku::Sudoku;
 
 fn main() {
     let mut sudoku = Sudoku::new();
-    match sudoku.generate_puzzle(Difficulty::Hard) {
-        Ok(grid) => sudoku.grid = grid,
-        Err(err) => println!("{}", err),
-    }
+    let solution = sudoku.generate_puzzle(Difficulty::Hard);
     sudoku.display();
-    println!("Valid {}", sudoku.is_valid());
-    println!("Correct {}", sudoku.is_correct());
+    solution.display();
 }

@@ -1,14 +1,38 @@
+use rand::Rng;
+
+use crate::board::cell::Cell;
+use crate::board::grid::Grid;
+use crate::game::sudoku::Difficulty;
 use crate::Sudoku;
 
 impl Sudoku {
-    pub fn generate(&self) {
-        // for i in self.grid.get_col(0).iter().len() {
-        //     let row = self.grid.get_row(i);
-        //     for j in self.grid.get_row(0).iter().len() {
-        //         let col = self.grid.get_col(j);
-        //         let subgrid = self.grid.get_subgrid(i / 3, j / 3);
-        //
-        //     }
-        // }
+    pub fn generate_puzzle(&mut self, difficulty: Difficulty) -> Grid {
+        let mut solution = Grid::new();
+        solution
+            .fill(0)
+            .expect("Failed to create the solution to the puzzle");
+
+        let mut grid = solution.clone();
+        let mut i = difficulty.value();
+        while i > 0 {
+            let grid_size = grid.size();
+            let (random_row, random_col) = (
+                rand::rng().random_range(0..grid_size),
+                rand::rng().random_range(0..grid_size),
+            );
+            if let Cell::Value(_) = grid.get(random_row, random_col) {
+                let mut grid_copy = grid.clone();
+                grid_copy.set(random_row, random_col, Cell::Empty);
+                if let Ok(_) = grid_copy.fill(0) {
+                    if grid_copy == solution {
+                        grid.set(random_row, random_col, Cell::Empty);
+                        i -= 1;
+                    }
+                }
+            }
+        }
+
+        self.grid = grid;
+        solution
     }
 }

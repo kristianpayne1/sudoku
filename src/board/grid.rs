@@ -1,6 +1,7 @@
 use super::cell::Cell;
 use crate::board::subgrid::SubGrid;
 
+#[derive(Clone, Copy, PartialEq)]
 pub struct Grid([[SubGrid; 3]; 3]);
 
 impl Grid {
@@ -38,5 +39,9 @@ impl Grid {
 
     pub fn get_subgrid(&self, sub_row: usize, sub_col: usize) -> &SubGrid {
         &self.0[sub_row][sub_col]
+    }
+
+    pub fn size(&self) -> usize {
+        9
     }
 }

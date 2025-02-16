@@ -1,11 +1,15 @@
 use super::cell::Cell;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct SubGrid([[Cell; 3]; 3]);
 
 impl SubGrid {
     pub fn new() -> Self {
         Self([[Cell::Empty; 3]; 3])
+    }
+
+    pub fn size(&self) -> usize {
+        3
     }
 
     pub fn get(&self, row: usize, col: usize) -> &Cell {

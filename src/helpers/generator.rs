@@ -3,6 +3,7 @@ use rand::Rng;
 use crate::board::cell::Cell;
 use crate::board::error::NoAvailableValidValuesError;
 use crate::board::grid::Grid;
+use crate::game::sudoku::Difficulty;
 use crate::Sudoku;
 
 impl Sudoku {
@@ -39,9 +40,29 @@ impl Sudoku {
         Ok(())
     }
 
-    pub fn generate_puzzle(&mut self) -> Result<Grid, NoAvailableValidValuesError> {
+    pub fn generate_puzzle(
+        &mut self,
+        difficulty: Difficulty,
+    ) -> Result<Grid, NoAvailableValidValuesError> {
         let mut grid = Grid::new();
         self.fill_board(&mut grid, 0)?;
+        grid.display();
+
+        let mut i = difficulty.value();
+        while i > 0 {
+            let grid_size = grid.size();
+            let (random_row, random_col) = (
+                rand::rng().random_range(0..grid_size),
+                rand::rng().random_range(0..grid_size),
+            );
+            match grid.get(random_row, random_col) {
+                Cell::Empty => continue,
+                Cell::Value(_) => {
+                    grid.set(random_row, random_col, Cell::Empty);
+                    i -= 1;
+                }
+            }
+        }
         Ok(grid)
     }
 }

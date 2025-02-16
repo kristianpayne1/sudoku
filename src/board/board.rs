@@ -1,13 +1,13 @@
-use crate::game::Sudoku;
+use crate::board::grid::Grid;
 
 pub const TOP_BORDER: &str = "╔═ ═ ═╤═ ═ ═╤═ ═ ═╦═ ═ ═╤═ ═ ═╤═ ═ ═╦═ ═ ═╤═ ═ ═╤═ ═ ═╗";
 pub const BOTTOM_BORDER: &str = "╚═ ═ ═╧═ ═ ═╧═ ═ ═╩═ ═ ═╧═ ═ ═╧═ ═ ═╩═ ═ ═╧═ ═ ═╧═ ═ ═╝";
 pub const MID_BORDER: &str = "╟─ ─ ─┼─ ─ ─┼─ ─ ─╫─ ─ ─┼─ ─ ─┼─ ─ ─╫─ ─ ─┼─ ─ ─┼─ ─ ─╢";
 
-impl Sudoku {
+impl Grid {
     pub fn display(&self) {
-        let num_rows: usize = self.grid.get_col(0).len() * 2 + 1;
-        let num_cols: usize = self.grid.get_row(0).len() * 6 + 1;
+        let num_rows: usize = self.get_col(0).len() * 2 + 1;
+        let num_cols: usize = self.get_row(0).len() * 6 + 1;
 
         for row in 0..num_rows {
             match row {
@@ -21,7 +21,7 @@ impl Sudoku {
                             c if c % 18 == 0 => '║',
                             c if c % 6 == 0 => '│',
                             c if c % 3 == 0 => {
-                                format!("{}", self.grid.get((row - 1) / 2, (col - 1) / 6))
+                                format!("{}", self.get((row - 1) / 2, (col - 1) / 6))
                                     .parse()
                                     .unwrap()
                             }

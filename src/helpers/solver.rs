@@ -1,5 +1,4 @@
 use crate::board::cell::Cell;
-use crate::board::error::NoSolutionFoundError;
 use crate::board::grid::Grid;
 use crate::Sudoku;
 use std::collections::HashSet;
@@ -40,66 +39,5 @@ impl Sudoku {
             .collect();
 
         get_available_values(&cells)
-    }
-
-    pub fn solve_for(
-        &self,
-        grid: Grid,
-        row: usize,
-        col: usize,
-    ) -> Result<u8, NoSolutionFoundError> {
-        let row_list = grid.get_row(row);
-        let col_list = grid.get_col(col);
-        let sub_grid = grid.get_subgrid(row / 3, col / 3);
-
-        // Check if only one value is available in row, column, or subgrid
-        for list in [&row_list, &col_list, &sub_grid.get_all()] {
-            let available_values = get_available_values(list);
-            if available_values.len() == 1 {
-                return Ok(available_values.iter().next().unwrap().clone());
-            }
-        }
-
-        let all_available_values = Self::get_all_available_values(&grid, row, col);
-        let (sub_row, sub_col) = (row % 3, col % 3);
-
-        let row_neighbors = [
-            grid.get_row((sub_row + 1) % 3),
-            grid.get_row((sub_row + 2) % 3),
-        ];
-        let col_neighbors = [
-            grid.get_col((sub_col + 1) % 3),
-            grid.get_col((sub_col + 2) % 3),
-        ];
-
-        let row_neighbors_duplicates = get_duplicates(row_neighbors.concat());
-        let col_neighbors_duplicates = get_duplicates(col_neighbors.concat());
-
-        // Check for unique intersections
-        if sub_grid.get_col(sub_col).len() == 2 {
-            for &value in &all_available_values {
-                if row_neighbors_duplicates.contains(&value) {
-                    return Ok(value);
-                }
-            }
-        }
-
-        if sub_grid.get_row(sub_row).len() == 2 {
-            for &value in &all_available_values {
-                if col_neighbors_duplicates.contains(&value) {
-                    return Ok(value);
-                }
-            }
-        }
-
-        for value in all_available_values {
-            if col_neighbors_duplicates.contains(&value)
-                && row_neighbors_duplicates.contains(&value)
-            {
-                return Ok(value);
-            }
-        }
-
-        Err(NoSolutionFoundError)
     }
 }

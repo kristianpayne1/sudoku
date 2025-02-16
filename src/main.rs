@@ -1,8 +1,9 @@
+use sudoku::game::sudoku::Difficulty;
 use sudoku::Sudoku;
 
 fn main() {
     let mut sudoku = Sudoku::new();
-    match sudoku.generate_puzzle() {
+    match sudoku.generate_puzzle(Difficulty::Hard) {
         Ok(grid) => sudoku.grid = grid,
         Err(err) => println!("{}", err),
     }

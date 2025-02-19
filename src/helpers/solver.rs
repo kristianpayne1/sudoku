@@ -60,17 +60,69 @@ impl Grid {
         }
         Ok(())
     }
+
+    pub fn solve_for(&mut self, row: usize, col: usize) -> Result<u8, NoAvailableValidValuesError> {
+        let cell = self.get(row, col);
+        if let Cell::Value(value) = cell {
+            return Ok(value.clone());
+        }
+
+        let all_available_values = self.get_all_available_values(row, col);
+        if all_available_values.len() == 1 {
+            return Ok(all_available_values.into_iter().next().unwrap());
+        }
+
+        let (sub_row, sub_col) = (row / 3, col / 3);
+        let subgrid = self.get_subgrid(sub_row, sub_col);
+        let mut possible_values: HashSet<u8> = HashSet::new();
+        for available_value in all_available_values {
+            'outer: for i in 0..subgrid.size() {
+                for j in 0..subgrid.size() {
+                    let cell = subgrid.get(i, j);
+                    if let Cell::Empty = cell {
+                        let all_available_subgrid_cell_values =
+                            self.get_all_available_values(sub_row + i, sub_col + j);
+                        if !all_available_subgrid_cell_values.contains(&available_value)
+                            && !possible_values.contains(&available_value)
+                        {
+                            possible_values.insert(available_value);
+                        } else if all_available_subgrid_cell_values.contains(&available_value) {
+                            possible_values.remove(&available_value);
+                            break 'outer;
+                        }
+                    }
+                }
+            }
+        }
+        if possible_values.len() == 1 {
+            return Ok(possible_values.into_iter().next().unwrap());
+        }
+        Err(NoAvailableValidValuesError)
+    }
 }
 
 impl Sudoku {
     pub fn solve(&mut self) {
         match self.grid.fill(0) {
             Err(NoAvailableValidValuesError) => {
-                println!("No available solutions found!");
+                println!("No solutions found!");
             }
             Ok(_) => {
                 self.grid.display();
                 println!("Successfully solved!");
+            }
+        }
+    }
+
+    pub fn solve_for(&mut self, row: usize, col: usize) {
+        match self.grid.solve_for(row, col) {
+            Err(NoAvailableValidValuesError) => {
+                println!("No solutions found!");
+            }
+            Ok(value) => {
+                self.grid.set(row, col, Cell::Value(value));
+                self.grid.display();
+                println!("Found value for row {}, column {}: {}", row, col, value);
             }
         }
     }

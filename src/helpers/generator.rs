@@ -20,15 +20,16 @@ impl Sudoku {
                 rand::rng().random_range(0..grid_size),
                 rand::rng().random_range(0..grid_size),
             );
-            if let Cell::Value(_) = grid.get(random_row, random_col) {
+            if let Cell::Value(solution_value) = grid.get(random_row, random_col) {
                 let mut grid_copy = grid.clone();
                 grid_copy.set(random_row, random_col, Cell::Empty);
-                if let Ok(_) = grid_copy.fill(0) {
-                    if grid_copy == solution {
+                grid_copy.display();
+                if let Ok(value) = grid_copy.solve_for(random_row, random_col) {
+                    if &value == solution_value {
                         grid.set(random_row, random_col, Cell::Empty);
-                        i -= 1;
                     }
                 }
+                i -= 1;
             }
         }
 
